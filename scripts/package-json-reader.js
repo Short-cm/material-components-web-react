@@ -10,12 +10,12 @@ const readMaterialPackages = () => {
   ];
 
   for (let dep in packageJson.devDependencies) {
-    if (dep.startsWith('@material/')) {
+    if (dep.startsWith('@material/') || dep.startsWith('@shortcm/')) {
       dependencies.push(dep);
     }
   }
   return dependencies;
-}
+};
 
 
 module.exports = {readMaterialPackages};
