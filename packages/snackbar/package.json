@@ -1,6 +1,6 @@
 {
   "name": "@shortcm/react-snackbar",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Material Components React Snackbar",
   "license": "MIT",
   "main": "dist/index.js",

@@ -58,7 +58,7 @@ export class Snackbar extends React.Component<Props, State> {
       classes.add('mdc-snackbar--stacked');
 
     this.state = {
-      classes: new Set(),
+      classes,
     }
 
     this.foundation = new MDCSnackbarFoundation(this.adapter)
