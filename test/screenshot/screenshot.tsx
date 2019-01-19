@@ -15,7 +15,7 @@ const serviceAccountKey: string = process.env.MDC_GCLOUD_SERVICE_ACCOUNT_KEY || 
 const branchName = process.env.MDC_BRANCH_NAME;
 const commitHash = process.env.MDC_COMMIT_HASH;
 const goldenFilePath = './test/screenshot/golden.json';
-const bucketName = process.env.MDC_SCREENSHOT_BUCKET || 'screenshot-uploads';
+const bucketName: string = process.env.MDC_SCREENSHOT_BUCKET || 'screenshot-uploads';
 const defaultMetadata = {
   commit: commitHash,
   branch: branchName,
