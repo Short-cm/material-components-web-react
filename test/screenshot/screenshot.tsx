@@ -187,7 +187,10 @@ export default class Screenshot {
           try {
             // Make the image public and set it's metadata
             await file.makePublic();
-            await file.setMetadata({metadata});
+            await file.setMetadata({
+              metadata,
+              contentType: 'image/png',
+            });
             console.log('✔︎ Uploaded', imagePath);
             resolve();
           } catch (err) {
