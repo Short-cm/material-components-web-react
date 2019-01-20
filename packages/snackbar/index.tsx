@@ -39,6 +39,7 @@ type Props = {
   onOpen?: () => void,
   onBeforeClose?: (reason: string) => void,
   onClose?: (reason: string) => void,
+  onAnnounce?: () => void,
 }
 
 type State = {
@@ -86,8 +87,8 @@ export class Snackbar extends React.Component<Props, State> {
         });
       },
       announce: () => {
+        // Usually it works automatically if this component uses conditional rendering
         this.props.onAnnounce && this.props.onAnnounce();
-        console.log('TODO Snackbar/announce - have no idea what to put here');
       },
       notifyOpening: () => {
         const { onBeforeOpen } = this.props;
@@ -115,7 +116,10 @@ export class Snackbar extends React.Component<Props, State> {
       }
     }
   }
-  handleActionClick(e: React.MouseEvent<HTMLButtonElement>) {
+  handleKeyDown = (e: React.KeyboardEvent) => {
+    this.foundation.handleKeyDown(e.nativeEvent);
+  }
+  handleActionClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     this.foundation.handleActionButtonClick(e.nativeEvent)
   }
   componentDidMount() {
@@ -129,11 +133,11 @@ export class Snackbar extends React.Component<Props, State> {
     return classnames(this.props.className, ...Array.from(this.state.classes));
   }
   render() {
-    return <div className={`mdc-snackbar ${this.classes}`}>
+    return <div className={`mdc-snackbar ${this.classes}`} onKeyDown={this.handleKeyDown}>
       <div className="mdc-snackbar__surface">
         <div className="mdc-snackbar__label"
             role="status"
-            aria-live={this.state.ariaLive}>
+            aria-live="polite">
           {this.props.message}
         </div>
         {this.props.actionText ?
