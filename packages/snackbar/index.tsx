@@ -1,6 +1,6 @@
 // The MIT License
 //
-// Copyright (c) 2018 Google, Inc.
+// Copyright (c) 2019 Google, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -42,7 +42,8 @@ type Props = {
 }
 
 type State = {
-  classes: Set<string>
+  classes: Set<string>,
+  ariaLive: string,
 }
 
 export class Snackbar extends React.Component<Props, State> {
@@ -59,6 +60,7 @@ export class Snackbar extends React.Component<Props, State> {
 
     this.state = {
       classes,
+      ariaLive: 'polite',
     }
 
     this.foundation = new MDCSnackbarFoundation(this.adapter)
@@ -84,6 +86,7 @@ export class Snackbar extends React.Component<Props, State> {
         });
       },
       announce: () => {
+        this.props.onAnnounce && this.props.onAnnounce();
         console.log('TODO Snackbar/announce - have no idea what to put here');
       },
       notifyOpening: () => {
@@ -130,7 +133,7 @@ export class Snackbar extends React.Component<Props, State> {
       <div className="mdc-snackbar__surface">
         <div className="mdc-snackbar__label"
             role="status"
-            aria-live="polite">
+            aria-live={this.state.ariaLive}>
           {this.props.message}
         </div>
         {this.props.actionText ?
