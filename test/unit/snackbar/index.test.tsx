@@ -17,19 +17,19 @@ test('does not render actions block if no actions sent', () => {
 });
 
 test('renders actions', () => {
-  const wrapper = shallow(<Snackbar message="example" actionText="action" />);
+  const wrapper = shallow(<Snackbar message='example' actionText='action' />);
   assert.equal(wrapper.find('.mdc-snackbar__actions').length, 1);
-  assert.equal(wrapper.find('.mdc-snackbar__action').length, 1)
+  assert.equal(wrapper.find('.mdc-snackbar__action').length, 1);
 });
 
 test('renders leading actions', () => {
-  const wrapper = shallow(<Snackbar leading={true} message="example" actionText="action" />);
+  const wrapper = shallow(<Snackbar leading={true} message='example' actionText='action' />);
   assert.isTrue(wrapper.hasClass('mdc-snackbar'));
   assert.isTrue(wrapper.hasClass('mdc-snackbar--leading'));
 });
 
 test('renders stacked actions', () => {
-  const wrapper = shallow(<Snackbar stacked={true} message="example" actionText="action" />);
+  const wrapper = shallow(<Snackbar stacked={true} message='example' actionText='action' />);
   assert.isTrue(wrapper.hasClass('mdc-snackbar'));
   assert.isTrue(wrapper.hasClass('mdc-snackbar--stacked'));
 });

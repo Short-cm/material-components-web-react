@@ -22,7 +22,7 @@
 
 import * as React from 'react';
 import classnames from 'classnames';
-import { IMDCSnackbarAdapter, IMDCSnackbarFoundation } from './types';
+import {IMDCSnackbarAdapter, IMDCSnackbarFoundation} from './types';
 
 // @ts-ignore no .d.ts file
 import {MDCSnackbarFoundation} from '@material/snackbar';
@@ -40,47 +40,50 @@ type Props = {
   onBeforeClose?: (reason: string) => void,
   onClose?: (reason: string) => void,
   onAnnounce?: () => void,
-}
+};
 
 type State = {
   classes: Set<string>,
-  ariaLive: string,
-}
+};
 
 export class Snackbar extends React.Component<Props, State> {
   foundation: IMDCSnackbarFoundation
   constructor(props: Props) {
     super(props);
-    const { timeoutMs, closeOnEscape, leading, stacked } = this.props;
+    const {timeoutMs, closeOnEscape, leading, stacked} = this.props;
     const classes = new Set();
-    if (leading)
+    if (leading) {
       classes.add('mdc-snackbar--leading');
-    
-    if (stacked)
+    }
+
+    if (stacked) {
       classes.add('mdc-snackbar--stacked');
+    }
 
     this.state = {
       classes,
-      ariaLive: 'polite',
+    };
+
+    this.foundation = new MDCSnackbarFoundation(this.adapter);
+    if (timeoutMs) {
+      this.foundation.setTimeoutMs(timeoutMs);
     }
 
-    this.foundation = new MDCSnackbarFoundation(this.adapter)
-    if (timeoutMs)
-      this.foundation.setTimeoutMs(timeoutMs);
-    if (closeOnEscape)
+    if (closeOnEscape) {
       this.foundation.setCloseOnEscape(closeOnEscape);
+    }
   }
   get adapter(): IMDCSnackbarAdapter {
     return {
       addClass: (className: string) => {
-        const { classes } = this.state;
+        const {classes} = this.state;
         classes.add(className);
         this.setState({
           classes,
         });
       },
       removeClass: (className: string) => {
-        const { classes } = this.state;
+        const {classes} = this.state;
         classes.delete(className);
         this.setState({
           classes,
@@ -91,39 +94,39 @@ export class Snackbar extends React.Component<Props, State> {
         this.props.onAnnounce && this.props.onAnnounce();
       },
       notifyOpening: () => {
-        const { onBeforeOpen } = this.props;
+        const {onBeforeOpen} = this.props;
         if (onBeforeOpen) {
           onBeforeOpen();
         }
       },
       notifyOpened: () => {
-        const { onOpen } = this.props;
+        const {onOpen} = this.props;
         if (onOpen) {
           onOpen();
         }
       },
       notifyClosing: (reason: string) => {
-        const { onBeforeClose } = this.props;
+        const {onBeforeClose} = this.props;
         if (onBeforeClose) {
           onBeforeClose(reason);
         }
       },
       notifyClosed: (reason: string) => {
-        const { onClose } = this.props;
+        const {onClose} = this.props;
         if (onClose) {
           onClose(reason);
         }
-      }
-    }
+      },
+    };
   }
   close(action: string) {
-    this.foundation.close(action)
+    this.foundation.close(action);
   }
   getTimeoutMs() {
-    return this.foundation.getTimeoutMs()
+    return this.foundation.getTimeoutMs();
   }
   getCloseOnEscape() {
-    return this.foundation.getTimeoutMs()
+    return this.foundation.getTimeoutMs();
   }
   isOpen() {
     return this.foundation.isOpen();
@@ -132,7 +135,7 @@ export class Snackbar extends React.Component<Props, State> {
     this.foundation.handleKeyDown(e.nativeEvent);
   }
   handleActionClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    this.foundation.handleActionButtonClick(e.nativeEvent)
+    this.foundation.handleActionButtonClick(e.nativeEvent);
   }
   componentDidMount() {
     this.foundation.init();
@@ -146,15 +149,17 @@ export class Snackbar extends React.Component<Props, State> {
   }
   render() {
     return <div className={`mdc-snackbar ${this.classes}`} onKeyDown={this.handleKeyDown}>
-      <div className="mdc-snackbar__surface">
-        <div className="mdc-snackbar__label"
-            role="status"
-            aria-live="polite">
+      <div className='mdc-snackbar__surface'>
+        <div className='mdc-snackbar__label'
+          role='status'
+          aria-live='polite'>
           {this.props.message}
         </div>
         {this.props.actionText ?
-          <div className="mdc-snackbar__actions">
-            <button type="button" onClick={this.handleActionClick} className="mdc-button mdc-snackbar__action">{this.props.actionText}</button>
+          <div className='mdc-snackbar__actions'>
+            <button type='button' onClick={this.handleActionClick} className='mdc-button mdc-snackbar__action'>
+              {this.props.actionText}
+            </button>
           </div> : null}
       </div>
     </div>;
