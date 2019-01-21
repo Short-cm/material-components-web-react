@@ -21,3 +21,15 @@ test('renders actions', () => {
   assert.equal(wrapper.find('.mdc-snackbar__actions').length, 1);
   assert.equal(wrapper.find('.mdc-snackbar__action').length, 1)
 });
+
+test('renders leading actions', () => {
+  const wrapper = shallow(<Snackbar leading={true} message="example" actionText="action" />);
+  assert.isTrue(wrapper.hasClass('mdc-snackbar'));
+  assert.isTrue(wrapper.hasClass('mdc-snackbar--leading'));
+});
+
+test('renders stacked actions', () => {
+  const wrapper = shallow(<Snackbar stacked={true} message="example" actionText="action" />);
+  assert.isTrue(wrapper.hasClass('mdc-snackbar'));
+  assert.isTrue(wrapper.hasClass('mdc-snackbar--stacked'));
+});

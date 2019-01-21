@@ -1,5 +1,4 @@
 import * as React from 'react';
-import MaterialIcon from '../../../packages/material-icon/index';
 import '../../../packages/snackbar/index.scss';
 import './index.scss';
 import { Snackbar } from '../../../packages/snackbar/index';
@@ -12,6 +11,12 @@ const ButtonScreenshotTest = () => {
       </div>
       <div className='snackbar-container'>
         <Snackbar message="Example" actionText="action" />
+      </div>
+      <div className='snackbar-container'>
+        <Snackbar message="Example" leading={true} actionText="action" />
+      </div>
+      <div className='snackbar-container'>
+        <Snackbar message="Example" stacked={true} actionText="action" />
       </div>
     </div>
   );
