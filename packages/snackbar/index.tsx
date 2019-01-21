@@ -116,6 +116,18 @@ export class Snackbar extends React.Component<Props, State> {
       }
     }
   }
+  close(action: string) {
+    this.foundation.close(action)
+  }
+  getTimeoutMs() {
+    return this.foundation.getTimeoutMs()
+  }
+  getCloseOnEscape() {
+    return this.foundation.getTimeoutMs()
+  }
+  isOpen() {
+    return this.foundation.isOpen();
+  }
   handleKeyDown = (e: React.KeyboardEvent) => {
     this.foundation.handleKeyDown(e.nativeEvent);
   }
