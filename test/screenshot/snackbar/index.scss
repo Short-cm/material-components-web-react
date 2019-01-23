@@ -1,6 +1,6 @@
 .snackbar-container {
   margin-bottom: 16px;
-  .mdc-snackbar {
-    position: static !important;
+  .mdc-snackbar.mdc-snackbar {
+    position: static;
   }
 }

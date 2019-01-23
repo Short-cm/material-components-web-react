@@ -1,6 +1,6 @@
-# React Button
+# React Snackbar
 
-A React version of an [MDC Button](https://github.com/material-components/material-components-web/tree/master/packages/mdc-snackbar).
+A React version of an [MDC Snackbar](https://github.com/material-components/material-components-web/tree/master/packages/mdc-snackbar).
 
 ## Installation
 
