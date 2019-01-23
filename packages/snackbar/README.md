@@ -47,6 +47,7 @@ closeOnEscape | Boolean | Closes popup on "Esc" button if true.
 actionText | String | Text for action button
 leading | Boolean | Shows snackbar on the left if true (or right for rtl languages)
 stacked | Boolean | Shows buttons under text if true
+onAnnounce | Function() => void | Callback for handling screenreader announce event
 onOpening | Function() => void | Callback for handling event, which happens before opening
 onOpen | Function(evt: Event) => void | Callback for handling event, which happens after opening
 onClosing | Function() => void | Callback for handling event, which happens before closing

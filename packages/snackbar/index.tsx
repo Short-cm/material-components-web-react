@@ -30,18 +30,18 @@ import {IMDCSnackbarAdapter, IMDCSnackbarFoundation} from './types';
 import {MDCSnackbarFoundation} from '@material/snackbar';
 
 export interface Props {
-  message: string,
-  className?: string,
-  timeoutMs?: number,
-  closeOnEscape?: boolean,
-  actionText?: string,
-  leading?: boolean,
-  stacked?: boolean,
-  onOpening?: () => void,
-  onOpen?: () => void,
-  onClosing?: (reason: string) => void,
-  onClose?: (reason: string) => void,
-  onAnnounce?: () => void,
+  message: string;
+  className?: string;
+  timeoutMs?: number;
+  closeOnEscape?: boolean;
+  actionText?: string;
+  leading?: boolean;
+  stacked?: boolean;
+  onOpening?: () => void;
+  onOpen?: () => void;
+  onClosing?: (reason: string) => void;
+  onClose?: (reason: string) => void;
+  onAnnounce?: () => void;
 };
 
 type State = {
