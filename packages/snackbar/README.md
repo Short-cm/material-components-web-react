@@ -47,9 +47,9 @@ closeOnEscape | Boolean | Closes popup on "Esc" button if true.
 actionText | String | Text for action button
 leading | Boolean | Shows snackbar on the left if true (or right for rtl languages)
 stacked | Boolean | Shows buttons under text if true
-onBeforeOpen | Function() => void | Callback for handling event, which happens before opening
+onOpening | Function() => void | Callback for handling event, which happens before opening
 onOpen | Function(evt: Event) => void | Callback for handling event, which happens after opening
-onBeforeClose | Function() => void | Callback for handling event, which happens before closing
+onClosing | Function() => void | Callback for handling event, which happens before closing
 onClose | Function() => void | Callback for handling event, which happens after closing
 
 ## Sass Mixins

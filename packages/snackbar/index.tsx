@@ -24,10 +24,11 @@ import * as React from 'react';
 import classnames from 'classnames';
 import {IMDCSnackbarAdapter, IMDCSnackbarFoundation} from './types';
 
+// TODO: replace with MDC Web types when available
 // @ts-ignore no .d.ts file
 import {MDCSnackbarFoundation} from '@material/snackbar';
 
-type Props = {
+export interface Props {
   message: string,
   className?: string,
   timeoutMs?: number,
@@ -35,9 +36,9 @@ type Props = {
   actionText?: string,
   leading?: boolean,
   stacked?: boolean,
-  onBeforeOpen?: () => void,
+  onOpening?: () => void,
   onOpen?: () => void,
-  onBeforeClose?: (reason: string) => void,
+  onClosing?: (reason: string) => void,
   onClose?: (reason: string) => void,
   onAnnounce?: () => void,
 };
@@ -94,9 +95,9 @@ export class Snackbar extends React.Component<Props, State> {
         this.props.onAnnounce && this.props.onAnnounce();
       },
       notifyOpening: () => {
-        const {onBeforeOpen} = this.props;
-        if (onBeforeOpen) {
-          onBeforeOpen();
+        const {onOpening} = this.props;
+        if (onOpening) {
+          onOpening();
         }
       },
       notifyOpened: () => {
@@ -106,9 +107,9 @@ export class Snackbar extends React.Component<Props, State> {
         }
       },
       notifyClosing: (reason: string) => {
-        const {onBeforeClose} = this.props;
-        if (onBeforeClose) {
-          onBeforeClose(reason);
+        const {onClosing} = this.props;
+        if (onClosing) {
+          onClosing(reason);
         }
       },
       notifyClosed: (reason: string) => {
