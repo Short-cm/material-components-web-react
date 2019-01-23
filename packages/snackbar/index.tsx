@@ -22,9 +22,10 @@
 
 import * as React from 'react';
 import classnames from 'classnames';
-import {IMDCSnackbarAdapter, IMDCSnackbarFoundation} from './types';
 
 // TODO: replace with MDC Web types when available
+import {IMDCSnackbarAdapter, IMDCSnackbarFoundation} from './types';
+
 // @ts-ignore no .d.ts file
 import {MDCSnackbarFoundation} from '@material/snackbar';
 
