@@ -21,6 +21,17 @@
 // THE SOFTWARE.
 
 // TODO: remove this when MDC Web types are added.
+
+export interface IMDCSnackbarAdapter {
+    addClass(className: string): void
+    removeClass(className: string): void
+    announce(): void
+    notifyOpening(): void
+    notifyOpened(): void
+    notifyClosing(reason: string): void
+    notifyClosed(reason: string): void
+}
+
 export interface IMDCSnackbarFoundation {
     open(): void;
     close(action: string): void;
@@ -34,14 +45,5 @@ export interface IMDCSnackbarFoundation {
     handleActionIconClick(event: MouseEvent): void
     init(): void
     destroy(): void
-}
-
-export interface IMDCSnackbarAdapter {
-    addClass(className: string): void
-    removeClass(className: string): void
-    announce(): void
-    notifyOpening(): void
-    notifyOpened(): void
-    notifyClosing(reason: string): void
-    notifyClosed(reason: string): void
+    adapter_: IMDCSnackbarAdapter
 }

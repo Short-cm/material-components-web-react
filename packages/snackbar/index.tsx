@@ -37,6 +37,7 @@ export interface Props {
   actionText?: string;
   leading?: boolean;
   stacked?: boolean;
+  open?: boolean;
   onOpening?: () => void;
   onOpen?: () => void;
   onClosing?: (reason: string) => void;
@@ -50,6 +51,13 @@ type State = {
 
 export class Snackbar extends React.Component<Props, State> {
   foundation: IMDCSnackbarFoundation
+
+  static defaultProps: Partial<Props> = {
+    open: true,
+    stacked: false,
+    leading: false,
+  }
+
   constructor(props: Props) {
     super(props);
     const {timeoutMs, closeOnEscape, leading, stacked} = this.props;
@@ -141,16 +149,17 @@ export class Snackbar extends React.Component<Props, State> {
   }
   componentDidMount() {
     this.foundation.init();
-    this.foundation.open();
+    if (this.props.open)
+      this.foundation.open();
   }
   componentWillUnmount() {
     this.foundation.destroy();
   }
   get classes() {
-    return classnames(this.props.className, ...Array.from(this.state.classes));
+    return classnames(this.props.className, 'mdc-snackbar', ...Array.from(this.state.classes));
   }
   render() {
-    return <div className={`mdc-snackbar ${this.classes}`} onKeyDown={this.handleKeyDown}>
+    return <div className={this.classes} onKeyDown={this.handleKeyDown}>
       <div className='mdc-snackbar__surface'>
         <div className='mdc-snackbar__label'
           role='status'
