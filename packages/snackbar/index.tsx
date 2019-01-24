@@ -136,7 +136,7 @@ export class Snackbar extends React.Component<Props, State> {
     return this.foundation.getTimeoutMs();
   }
   getCloseOnEscape() {
-    return this.foundation.getTimeoutMs();
+    return this.foundation.getCloseOnEscape();
   }
   isOpen() {
     return this.foundation.isOpen();
