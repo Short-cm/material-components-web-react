@@ -21,14 +21,15 @@
 // THE SOFTWARE.
 import * as React from 'react';
 import * as classnames from 'classnames';
-// @ts-ignore no .d.ts file
-import {MDCTextFieldFoundation, MDCTextFieldAdapter} from '@material/textfield/dist/mdc.textfield';
+import {MDCTextFieldAdapter} from '@material/textfield/adapter';
+import {MDCTextFieldFoundation} from '@material/textfield/foundation';
 import Input, {InputProps} from './Input';
 import Icon, {IconProps} from './icon/index';
 import HelperText, {HelperTextProps} from './helper-text/index';
 import FloatingLabel from '@material/react-floating-label';
 import LineRipple from '@material/react-line-ripple';
 import NotchedOutline from '@material/react-notched-outline';
+import {MDCTextFieldFoundationMap, MDCTextFieldHelperTextFoundation} from '@material/textfield';
 
 export interface Props<T> {
   // InputProps<T> includes the prop `id`, which we use below in the constructor
@@ -38,7 +39,7 @@ export interface Props<T> {
   dense: boolean;
   floatingLabelClassName: string;
   fullWidth: boolean;
-  helperText?: React.ReactElement<any>;
+  helperText?: React.ReactElement<HelperTextProps>;
   isRtl: boolean;
   label: React.ReactNode;
   leadingIcon?: React.ReactElement<React.HTMLProps<HTMLOrSVGElement>>;
@@ -121,8 +122,8 @@ class TextField<T extends {}> extends React.Component<TextFieldProps<T>, TextFie
   }
 
   componentDidMount() {
-    const foundationMap: object = {
-      helperText: this.helperTextAdapter,
+    const foundationMap: Partial<MDCTextFieldFoundationMap> = {
+      helperText: new MDCTextFieldHelperTextFoundation(),
     };
     const foundation = new MDCTextFieldFoundation(this.adapter, foundationMap);
     this.setState({foundation});
@@ -205,40 +206,17 @@ class TextField<T extends {}> extends React.Component<TextFieldProps<T>, TextFie
       this.inputAdapter,
       this.labelAdapter,
       this.lineRippleAdapter,
-      this.notchedOutlineAdapter
+      this.notchedOutlineAdapter,
     );
   }
 
   get inputAdapter(): Partial<MDCTextFieldAdapter> {
-    // For reference: This is the shape of what the vanilla component `getNativeInput` returns
-    // {
-    //  value: string,
-    //  disabled: boolean, --> doesn't need to be implemented since the <INPUT> handles it
-    //  also the `get disabled` isn't actually used, except in the vanilla component
-    //  validity: {
-    //    badInput: boolean,
-    //    valid: boolean,
-    //  },
-    // }
     return {
       getNativeInput: () => {
-        let badInput;
-        let valid;
-        if (this.inputComponent_) {
-          badInput = this.inputComponent_.isBadInput();
-          valid = this.inputComponent_.isValid();
+        if (this.inputComponent_ && this.inputComponent_.inputElement_) {
+          return this.inputComponent_.inputElement;
         }
-        const input = {
-          validity: {badInput, valid},
-        };
-        // https://stackoverflow.com/a/44913378
-        Object.defineProperty(input, 'value', {
-          get: () => this.state.value,
-          // set value doesn't need to be done, since value is set via <Input>
-          // needs setter here so it browser doesn't throw error
-          set: () => {},
-        });
-        return input;
+        return null;
       },
     };
   }
@@ -273,14 +251,6 @@ class TextField<T extends {}> extends React.Component<TextFieldProps<T>, TextFie
         this.setState({outlineIsNotched: true, notchedLabelWidth}),
       closeOutline: () => this.setState({outlineIsNotched: false}),
       hasOutline: () => !!this.props.outlined,
-    };
-  }
-
-  get helperTextAdapter(): Partial<MDCTextFieldAdapter> {
-    return {
-      showToScreenReader: () =>
-        this.setState({showHelperTextToScreenReader: true}),
-      setValidity: (isValid: boolean) => this.setState({isValid}),
     };
   }
 
@@ -404,14 +374,12 @@ class TextField<T extends {}> extends React.Component<TextFieldProps<T>, TextFie
       isValid,
       showHelperTextToScreenReader: showToScreenReader,
     } = this.state;
-    const props = Object.assign(
-      {
-        showToScreenReader,
-        isValid,
-        key: 'text-field-helper-text',
-      },
-      helperText.props,
-    );
+    const props = {
+      showToScreenReader,
+      isValid,
+      key: 'text-field-helper-text',
+      ...helperText.props,
+    };
     return React.cloneElement(helperText, props);
   }
 

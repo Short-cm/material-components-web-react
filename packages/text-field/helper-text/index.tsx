@@ -21,8 +21,7 @@
 // THE SOFTWARE.
 import * as React from 'react';
 import * as classnames from 'classnames';
-// @ts-ignore no .d.ts file
-import {MDCTextFieldHelperTextFoundation} from '@material/textfield/dist/mdc.textfield';
+import {MDCTextFieldHelperTextFoundation} from '@material/textfield/helper-text/foundation';
 
 export interface HelperTextProps {
   'aria-hidden': boolean;
@@ -46,7 +45,7 @@ export default class HelperText extends React.Component<
   HelperTextProps,
   HelperTextState
   > {
-  foundation_: MDCTextFieldHelperTextFoundation;
+  foundation_!: MDCTextFieldHelperTextFoundation;
 
   static defaultProps = {
     'aria-hidden': false,
@@ -60,6 +59,7 @@ export default class HelperText extends React.Component<
 
   constructor(props: HelperTextProps) {
     super(props);
+    this.foundation_ = new MDCTextFieldHelperTextFoundation(this.adapter);
     this.state = {
       'aria-hidden': props['aria-hidden'],
       'role': props.role,
@@ -68,10 +68,9 @@ export default class HelperText extends React.Component<
   }
 
   componentDidMount() {
-    this.foundation_ = new MDCTextFieldHelperTextFoundation(this.adapter);
     this.foundation_.init();
     if (this.props.showToScreenReader) {
-      this.foundation_.showToScreenReader(true);
+      this.foundation_.showToScreenReader();
     }
     if (!this.props.isValid) {
       this.foundation_.setValidity(false);
@@ -83,7 +82,9 @@ export default class HelperText extends React.Component<
 
   componentDidUpdate(prevProps: HelperTextProps) {
     if (this.props.showToScreenReader !== prevProps.showToScreenReader) {
-      this.foundation_.showToScreenReader(this.props.showToScreenReader);
+      if (this.props.showToScreenReader) {
+        this.foundation_.showToScreenReader();
+      }
     }
     if (this.props.isValid !== prevProps.isValid) {
       this.foundation_.setValidity(this.props.isValid);

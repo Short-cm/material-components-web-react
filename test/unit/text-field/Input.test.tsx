@@ -3,9 +3,10 @@ import * as td from 'testdouble';
 import {assert} from 'chai';
 import {mount, shallow} from 'enzyme';
 import {Input} from '../../../packages/text-field/index';
+import {MDCTextFieldFoundation} from '@material/textfield';
 
 const noop = () => {};
-const buildFoundation = (overrides = {}) => ({
+const buildFoundation = (overrides = {}): MDCTextFieldFoundation => ({
   activateFocus: noop,
   autoCompleteFocus: noop,
   deactivateFocus: noop,
@@ -16,7 +17,7 @@ const buildFoundation = (overrides = {}) => ({
   setUseNativeValidation: noop,
   setValid: noop,
   ...overrides,
-});
+}) as any;
 
 suite('Text Field Input');
 

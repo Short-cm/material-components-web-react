@@ -21,8 +21,7 @@
 // THE SOFTWARE.
 import * as React from 'react';
 import * as classnames from 'classnames';
-// @ts-ignore no .d.ts file
-import {MDCTextFieldFoundation} from '@material/textfield/dist/mdc.textfield';
+import {MDCTextFieldFoundation} from '@material/textfield/foundation';
 
 export interface InputProps<T> {
   className: string;
@@ -90,9 +89,9 @@ export default class Input<T extends {}> extends React.Component<
       setInputId,
       setDisabled,
       handleValueChange,
-      foundation,
       isValid,
     } = this.props;
+    const foundation = this.props.foundation as MDCTextFieldFoundation;
     if (setInputId && id) {
       setInputId(id);
     }
@@ -100,11 +99,11 @@ export default class Input<T extends {}> extends React.Component<
       setDisabled(true);
     }
     if (handleValueChange && value) {
-      handleValueChange(value, () => foundation.setValue(value));
+      handleValueChange(value, () => foundation.setValue(value as string));
     }
     if (isValid !== undefined) {
       foundation.setUseNativeValidation(false);
-      foundation.setValid(isValid);
+      foundation.setValid(Boolean(isValid));
     }
   }
 
@@ -114,11 +113,11 @@ export default class Input<T extends {}> extends React.Component<
       handleValueChange,
       setInputId,
       setDisabled,
-      foundation,
       value,
       disabled,
       isValid,
     } = this.props;
+    const foundation = this.props.foundation as MDCTextFieldFoundation;
 
     this.handleValidationAttributeUpdate(prevProps);
 
@@ -138,7 +137,7 @@ export default class Input<T extends {}> extends React.Component<
         if (this.state.wasUserTriggeredChange) {
           this.setState({wasUserTriggeredChange: false});
         } else {
-          foundation.setValue(value);
+          foundation.setValue(value as string);
         }
       });
     }
@@ -148,7 +147,7 @@ export default class Input<T extends {}> extends React.Component<
         foundation.setUseNativeValidation(true);
       } else {
         foundation.setUseNativeValidation(false);
-        foundation.setValid(isValid);
+        foundation.setValid(Boolean(isValid));
       }
     }
   }
@@ -163,28 +162,32 @@ export default class Input<T extends {}> extends React.Component<
   }
 
   handleFocus = (evt: React.FocusEvent<T extends HTMLInputElement ? HTMLInputElement : HTMLTextAreaElement>) => {
-    const {foundation, handleFocusChange, onFocus = () => {}} = this.props;
+    const {handleFocusChange, onFocus = () => {}} = this.props;
+    const foundation = this.props.foundation as MDCTextFieldFoundation;
     foundation.activateFocus();
     handleFocusChange(true);
     onFocus(evt);
   };
 
   handleBlur = (evt: React.FocusEvent<T extends HTMLInputElement ? HTMLInputElement : HTMLTextAreaElement>) => {
-    const {foundation, handleFocusChange, onBlur = () => {}} = this.props;
+    const {handleFocusChange, onBlur = () => {}} = this.props;
+    const foundation = this.props.foundation as MDCTextFieldFoundation;
     foundation.deactivateFocus();
     handleFocusChange(false);
     onBlur(evt);
   };
 
   handleMouseDown = (evt: React.MouseEvent<T extends HTMLInputElement ? HTMLInputElement : HTMLTextAreaElement>) => {
-    const {foundation, onMouseDown = () => {}} = this.props;
-    foundation.setTransformOrigin(evt);
+    const {onMouseDown = () => {}} = this.props;
+    const foundation = this.props.foundation as MDCTextFieldFoundation;
+    foundation.setTransformOrigin(evt.nativeEvent);
     onMouseDown(evt);
   };
 
   handleTouchStart = (evt: React.TouchEvent<T extends HTMLInputElement ? HTMLInputElement : HTMLTextAreaElement>) => {
-    const {foundation, onTouchStart = () => {}} = this.props;
-    foundation.setTransformOrigin(evt);
+    const {onTouchStart = () => {}} = this.props;
+    const foundation = this.props.foundation as MDCTextFieldFoundation;
+    foundation.setTransformOrigin(evt.nativeEvent);
     onTouchStart(evt);
   };
 
@@ -193,7 +196,8 @@ export default class Input<T extends {}> extends React.Component<
   // is used to let other subcomponents and the foundation know what the current
   // value of the input is.
   handleChange = (evt: React.FormEvent<T extends HTMLInputElement ? HTMLInputElement : HTMLTextAreaElement>) => {
-    const {foundation, onChange = () => {}} = this.props;
+    const {onChange = () => {}} = this.props;
+    const foundation = this.props.foundation as MDCTextFieldFoundation;
     // autoCompleteFocus runs on `input` event in MDC Web. In React, onChange and
     // onInput are the same event
     // https://stackoverflow.com/questions/38256332/in-react-whats-the-difference-between-onchange-and-oninput
@@ -203,7 +207,7 @@ export default class Input<T extends {}> extends React.Component<
   };
 
   handleValidationAttributeUpdate = (nextProps: Props<T>) => {
-    const {foundation} = nextProps;
+    const foundation = nextProps.foundation as MDCTextFieldFoundation;
     VALIDATION_ATTR_WHITELIST.some((attributeName: ValidationAttrWhiteList) => {
       let attr: ValidationAttrWhiteListReact;
       if (attributeName === 'minlength') {

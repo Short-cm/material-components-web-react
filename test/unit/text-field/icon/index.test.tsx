@@ -5,8 +5,14 @@ import {shallow} from 'enzyme';
 import Icon from '../../../../packages/text-field/icon/index';
 import MaterialIcon from '../../../../packages/material-icon/index';
 import {coerceForTesting} from '../../helpers/types';
+import {MDCTextFieldIconAdapter} from '@material/textfield';
 
 suite('Text Field Icon');
+
+function getAdapter(instance: Icon): MDCTextFieldIconAdapter {
+  // @ts-ignore adapter_ method is protected, we need to override it for testing purposes
+  return instance.foundation_.adapter_;
+}
 
 test('classNames adds classes', () => {
   const wrapper = shallow(
@@ -103,7 +109,7 @@ test(
         <i tabIndex={0} />
       </Icon>
     );
-    wrapper.instance().foundation_.setDisabled = td.func();
+    wrapper.instance().foundation_.setDisabled = td.func<(disabled: boolean) => null>();
     wrapper.setProps({disabled: true});
     td.verify(wrapper.instance().foundation_.setDisabled(true), {times: 1});
   }
@@ -118,7 +124,7 @@ test(
         <i tabIndex={0} />
       </Icon>
     );
-    wrapper.instance().foundation_.setDisabled = td.func();
+    wrapper.instance().foundation_.setDisabled = td.func<(disabled: boolean) => null>();
     wrapper.setProps({disabled: false});
     td.verify(wrapper.instance().foundation_.setDisabled(false), {times: 1});
   }
@@ -133,7 +139,7 @@ test(
         <i tabIndex={0} />
       </Icon>
     );
-    wrapper.instance().foundation_.setDisabled = td.func();
+    wrapper.instance().foundation_.setDisabled = td.func<(disabled: boolean) => null>();
     wrapper.setProps({children: <i />});
     td.verify(
       wrapper.instance().foundation_.setDisabled(td.matchers.isA(Boolean)),
@@ -148,7 +154,7 @@ test('#adapter.getAttr for tabIndex', () => {
       <i tabIndex={0} />
     </Icon>
   );
-  const tabIndex = wrapper.instance().foundation_.adapter_.getAttr('tabindex');
+  const tabIndex = getAdapter(wrapper.instance()).getAttr('tabindex');
   assert.equal(tabIndex, '0');
 });
 
@@ -158,7 +164,7 @@ test('#adapter.getAttr for role', () => {
       <i role='button' />
     </Icon>
   );
-  const role = wrapper.instance().foundation_.adapter_.getAttr('role');
+  const role = getAdapter(wrapper.instance()).getAttr('role');
   assert.equal(role, 'button');
 });
 
@@ -168,7 +174,7 @@ test('#adapter.setAttr for tabIndex', () => {
       <i tabIndex={0} />
     </Icon>
   );
-  wrapper.instance().foundation_.adapter_.setAttr('tabindex', -1);
+  getAdapter(wrapper.instance()).setAttr('tabindex', '-1');
   assert.equal(wrapper.state().tabindex, -1);
 });
 
@@ -178,7 +184,7 @@ test('#adapter.removeAttr for role', () => {
       <i role='button' />
     </Icon>
   );
-  wrapper.instance().foundation_.adapter_.removeAttr('role');
+  getAdapter(wrapper.instance()).removeAttr('role');
   assert.equal(wrapper.state().role, undefined);
 });
 
@@ -188,7 +194,7 @@ test('#adapter.getAttr for tabIndex works with Custom Component', () => {
       <MaterialIcon icon='favorite' tabIndex={0} />
     </Icon>
   );
-  const tabIndex = wrapper.instance().foundation_.adapter_.getAttr('tabindex');
+  const tabIndex = getAdapter(wrapper.instance()).getAttr('tabindex');
   assert.equal(tabIndex, '0');
 });
 
@@ -198,7 +204,7 @@ test('#adapter.getAttr for role works with Custom Component', () => {
       <MaterialIcon icon='favorite' role='button' />
     </Icon>
   );
-  const role = wrapper.instance().foundation_.adapter_.getAttr('role');
+  const role = getAdapter(wrapper.instance()).getAttr('role');
   assert.equal(role, 'button');
 });
 
@@ -208,7 +214,7 @@ test('#adapter.setAttr for tabIndex works with Custom Component', () => {
       <MaterialIcon icon='favorite' tabIndex={0} />
     </Icon>
   );
-  wrapper.instance().foundation_.adapter_.setAttr('tabindex', -1);
+  getAdapter(wrapper.instance()).setAttr('tabindex', '-1');
   assert.equal(wrapper.state().tabindex, -1);
 });
 
@@ -218,7 +224,7 @@ test('#adapter.removeAttr for role works with Custom Component', () => {
       <MaterialIcon icon='favorite' role='button' />
     </Icon>
   );
-  wrapper.instance().foundation_.adapter_.removeAttr('role');
+  getAdapter(wrapper.instance()).removeAttr('role');
   assert.equal(wrapper.state().role, undefined);
 });
 
@@ -229,7 +235,7 @@ test('#adapter.notifyIconAction calls props.onSelect', () => {
       <MaterialIcon icon='favorite' role='button' />
     </Icon>
   );
-  wrapper.instance().foundation_.adapter_.notifyIconAction();
+  getAdapter(wrapper.instance()).notifyIconAction();
   td.verify(onSelect(), {times: 1});
 });
 
@@ -240,8 +246,8 @@ test('onClick calls foundation.handleInteraction', () => {
       <MaterialIcon icon='favorite' role='button' />
     </Icon>
   );
-  const evt = coerceForTesting<React.MouseEvent>({});
-  wrapper.instance().foundation_.handleInteraction = td.func();
+  const evt = coerceForTesting<MouseEvent>({});
+  wrapper.instance().foundation_.handleInteraction = td.func<(evt: MouseEvent | KeyboardEvent) => null>();
   wrapper.simulate('click', evt);
   td.verify(wrapper.instance().foundation_.handleInteraction(evt), {
     times: 1,
@@ -255,8 +261,8 @@ test('onKeyDown call foundation.handleInteraction', () => {
       <MaterialIcon icon='favorite' role='button' />
     </Icon>
   );
-  const evt = coerceForTesting<React.KeyboardEvent>({});
-  wrapper.instance().foundation_.handleInteraction = td.func();
+  const evt = coerceForTesting<KeyboardEvent>({});
+  wrapper.instance().foundation_.handleInteraction = td.func<(evt: MouseEvent | KeyboardEvent) => null>();
   wrapper.simulate('keydown', evt);
   td.verify(wrapper.instance().foundation_.handleInteraction(evt), {
     times: 1,
@@ -290,7 +296,7 @@ test('#componentWillUnmount destroys foundation', () => {
     </Icon>
   );
   const foundation = wrapper.instance().foundation_;
-  foundation.destroy = td.func();
+  foundation.destroy = td.func<() => void>();
   wrapper.unmount();
   td.verify(foundation.destroy());
 });

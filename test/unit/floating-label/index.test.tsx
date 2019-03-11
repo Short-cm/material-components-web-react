@@ -4,9 +4,15 @@ import {suite, test} from 'mocha';
 import {assert} from 'chai';
 import {mount, shallow} from 'enzyme';
 import FloatingLabel from '../../../packages/floating-label/index';
+import {MDCFloatingLabelAdapter} from '@material/floating-label/adapter';
 import {coerceForTesting} from '../helpers/types';
 
 suite('Floating Label');
+
+function getAdapter(instance: FloatingLabel): MDCFloatingLabelAdapter {
+  // @ts-ignore adapter_ is protected property. We need to bypass this restriction for testing
+  return instance.foundation_.adapter_;
+}
 
 test('classNames adds classes', () => {
   const wrapper = shallow(
@@ -95,7 +101,7 @@ test('on animationend should remove the shake class', () => {
 
 test('#adapter.addClass', () => {
   const wrapper = mount<FloatingLabel>(<FloatingLabel />);
-  wrapper.instance().foundation_.adapter_.addClass('test-class-name');
+  getAdapter(wrapper.instance()).addClass('test-class-name');
   assert.isTrue(wrapper.state().classList.has('test-class-name'));
 });
 
@@ -105,14 +111,14 @@ test('#adapter.removeClass', () => {
   classList.add('test-class-name');
   wrapper.setState({classList});
   assert.isTrue(wrapper.state().classList.has('test-class-name'));
-  wrapper.instance().foundation_.adapter_.removeClass('test-class-name');
+  getAdapter(wrapper.instance()).removeClass('test-class-name');
   assert.isFalse(wrapper.state().classList.has('test-class-name'));
 });
 
 test('#componentWillUnmount destroys foundation', () => {
   const wrapper = shallow<FloatingLabel>(<FloatingLabel />);
   const foundation = wrapper.instance().foundation_;
-  foundation.destroy = td.func();
+  foundation.destroy = td.func<() => void>();
   wrapper.unmount();
   td.verify(foundation.destroy());
 });

@@ -113,7 +113,15 @@ export default class NotchedOutline extends React.Component<
   }
 
   render() {
-    const { style, children, className, notch, notchWidth, ...otherProps} = this.props;
+    const {
+      /* eslint-disable no-unused-vars */
+      className,
+      notch,
+      notchWidth,
+      /* eslint-enable no-unused-vars */
+      style,
+      children,
+      ...otherProps} = this.props;
     const notchStyle = {...style, width: this.state.actualWidth ? `${this.state.actualWidth}px`: undefined};
     return (
       <div

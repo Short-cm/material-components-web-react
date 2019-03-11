@@ -22,8 +22,8 @@
 
 import * as React from 'react';
 import * as classnames from 'classnames';
-// @ts-ignore no mdc .d.ts
-import {MDCFloatingLabelFoundation} from '@material/floating-label/dist/mdc.floatingLabel';
+import {MDCFloatingLabelFoundation} from '@material/floating-label/foundation';
+import {MDCFloatingLabelAdapter} from '@material/floating-label/adapter';
 
 export interface FloatingLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
   className?: string;
@@ -39,7 +39,7 @@ export default class FloatingLabel extends React.Component<
   FloatingLabelProps,
   FloatingLabelState
   > {
-  foundation_?: MDCFloatingLabelFoundation;
+  foundation_!: MDCFloatingLabelFoundation;
   labelElement_: React.RefObject<HTMLLabelElement> = React.createRef();
 
   static defaultProps: Partial<FloatingLabelProps> = {
@@ -53,10 +53,10 @@ export default class FloatingLabel extends React.Component<
 
   componentDidMount() {
     this.initializeFoundation();
-    this.handleWidthChange();
     if (this.props.float) {
       this.foundation_.float(true);
     }
+    this.handleWidthChange();
   }
 
   componentWillUnmount() {
@@ -68,7 +68,7 @@ export default class FloatingLabel extends React.Component<
       this.handleWidthChange();
     }
     if (this.props.float !== prevProps.float) {
-      this.foundation_.float(this.props.float);
+      this.foundation_.float(Boolean(this.props.float));
     }
   }
 
@@ -83,11 +83,19 @@ export default class FloatingLabel extends React.Component<
     return classnames('mdc-floating-label', Array.from(classList), className);
   }
 
-  get adapter() {
+  get adapter(): MDCFloatingLabelAdapter {
     return {
       addClass: (className: string) =>
         this.setState({classList: this.state.classList.add(className)}),
       removeClass: this.removeClassFromClassList,
+      getWidth: () => {
+        if (!this.labelElement_.current) {
+          return 0;
+        }
+        return this.labelElement_.current.offsetWidth;
+      },
+      registerInteractionHandler: () => null,
+      deregisterInteractionHandler: () => null,
     };
   }
 
